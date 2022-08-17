@@ -19,6 +19,7 @@ And some routes defined elsewhere `/routes/sample.py`:
 ```python
 @app.route('/')
 def index():
+    """Returns the index page"""
     pass
 
 @app.route('/greet/<name>/<age>')
@@ -41,31 +42,33 @@ Which gives us `openapi.yaml`:
 
 ```yaml
 info:
-    title: test
-    version: 1.0.0
-openapi: 3.0.0
+  title: test
+  version: 1.0.0
+openapi: 3.1.0
 paths:
-    /:
-        get:
-            response:
-                200:
-                    description: Success
-            tags:
-                - index
-    /greet/{name}/{age}:
-        get:
-            response:
-                200:
-                    description: Success
-            tags:
-                - greet
-        parameters:
-            - in: path
-              name: name
-              required: true
-              type: string
-            - in: path
-              name: age
-              required: true
-              type: string
+  /:
+    get:
+      response:
+        200:
+          description: Returns the index page
+      tags:
+        - index
+  /greet/{name}/{age}:
+    get:
+      response:
+        200:
+          description: Success
+      tags:
+        - greet
+    parameters:
+      - in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: age
+        required: true
+        schema:
+          type: string
 ```

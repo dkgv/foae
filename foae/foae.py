@@ -1,6 +1,6 @@
 import ast
-import yaml
 import json
+import pyaml
 import inspect
 
 class Foae:
@@ -26,6 +26,10 @@ class Foae:
             def is_flask_route(decorator: ast.Call) -> bool:
                 return isinstance(decorator, ast.Call) and decorator.func.attr == 'route' and isinstance(decorator.args[0], ast.Str)
 
+            # Get docstring block for function, if any
+            docstring = node.body[0].value if isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, ast.Str) else None
+
+            # Find flask route decorator, if any
             decorator = next((decorator for decorator in node.decorator_list if is_flask_route(decorator)), None)
             if not decorator:
                 continue
@@ -44,10 +48,11 @@ class Foae:
             if not definition:
                 definition['get'] = { 'tags': [node.name] }
             
+            description = docstring.s.strip() if docstring else 'Success'
             for _, d in definition.items():
                 d['response'] = {
                     200: {
-                        'description': 'Success'
+                        'description': description
                     }
                 }
 
@@ -104,8 +109,9 @@ class Foae:
         file_name = 'openapi.{}'.format(extension)
         with open(file_name, 'w') as f:
             if extension == 'yaml':
-                yaml.dump(self.spec, f)
+                pyaml.dump(self.spec, f)
             elif extension == 'json':
                 json.dump(self.spec, f)
             else:
+
                 raise ValueError('Unknown extension: {}'.format(extension))

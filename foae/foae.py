@@ -14,7 +14,7 @@ class Foae:
             'paths': {}
         }
     
-    def parse(self, module: ast.Module) -> None:
+    def parse(self, module: ast.Module, route_filter: callable = None) -> None:
         source = inspect.getsource(module)
         src_ast = ast.parse(source)
 
@@ -53,6 +53,9 @@ class Foae:
 
             # Store the route definition
             rule = decorator.args[0].s
+            if route_filter and not route_filter(rule):
+                continue
+
             rule = rule.replace('<', '{').replace('>', '}')
             routes[rule] = definition
 

@@ -6,7 +6,7 @@ import inspect
 class Foae:
     def __init__(self, title: str, version: str = '1.0.0') -> None:
         self.spec = {
-            'openapi': '3.0.0',
+            'openapi': '3.1.0',
             'info': {
                 'title': title,
                 'version': version,
@@ -72,7 +72,9 @@ class Foae:
                 'name': param,
                 'in': 'path',
                 'required': True,
-                'type': type_hints[param]
+                'schema': {
+                    'type': type_hints[param]
+                }
             } for param in path_params]
 
             if not definition:

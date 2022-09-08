@@ -48,14 +48,14 @@ openapi: 3.1.0
 paths:
   /:
     get:
-      response:
+      responses:
         200:
           description: Returns the index page
       tags:
         - index
   /greet/{name}/{age}:
     get:
-      response:
+      responses:
         200:
           description: Success
       tags:

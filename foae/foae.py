@@ -50,7 +50,7 @@ class Foae:
             
             description = docstring.s.strip() if docstring else 'Success'
             for _, d in definition.items():
-                d['response'] = {
+                d['responses'] = {
                     200: {
                         'description': description
                     }
